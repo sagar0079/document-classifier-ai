@@ -16,6 +16,6 @@ services:
   - type: web
     name: document-classifier-ui
     runtime: docker
-    dockerContext: ./frontend
-    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./document-classifier-ui
+    dockerfilePath: ./document-classifier-ui/Dockerfile
     plan: free
