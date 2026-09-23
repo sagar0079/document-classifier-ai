@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: document-classifier-api
+    runtime: docker
+    dockerContext: ./backend/DocumentClassifier.Api
+    dockerfilePath: ./backend/DocumentClassifier.Api/Dockerfile
+    plan: free
+    envVars:
+      - key: OpenAI__ApiKey
+        sync: false # set this manually in the Render dashboard - never commit a real key
+      - key: OpenAI__Model
+        value: gpt-4o-mini
+      - key: Cors__AllowedOrigins
+        value: https://document-classifier-ui.onrender.com
+
+  - type: web
+    name: document-classifier-ui
+    runtime: docker
+    dockerContext: ./frontend
+    dockerfilePath: ./frontend/Dockerfile
+    plan: free

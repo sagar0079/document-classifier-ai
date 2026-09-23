@@ -1,0 +1,62 @@
+<div class="classifier">
+  <header class="classifier__header">
+    <h1>Document Classifier</h1>
+    <p>Upload a scanned document. It's OCR'd and classified automatically.</p>
+  </header>
+
+  @if (!result()) {
+    <div
+      class="dropzone"
+      [class.dropzone--active]="isDragging()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop($event)">
+
+      <input
+        type="file"
+        id="file-input"
+        class="dropzone__input"
+        accept=".png,.jpg,.jpeg,.pdf,.tiff,.bmp"
+        (change)="onFileSelected($event)" />
+
+      @if (selectedFile()) {
+        <p class="dropzone__filename">{{ selectedFile()?.name }}</p>
+        <button class="btn btn--primary" (click)="classify()" [disabled]="isLoading()">
+          {{ isLoading() ? 'Classifying…' : 'Classify document' }}
+        </button>
+      } @else {
+        <label for="file-input" class="dropzone__label">
+          Drop a file here, or click to browse
+        </label>
+      }
+    </div>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+  }
+
+  @if (result(); as res) {
+    <div class="result">
+      <div class="result__badge">{{ res.classification.category }}</div>
+
+      <dl class="result__meta">
+        <dt>File</dt>
+        <dd>{{ res.fileName }}</dd>
+
+        <dt>Confidence</dt>
+        <dd>{{ confidencePercent() }}%</dd>
+
+        <dt>Reason</dt>
+        <dd>{{ res.classification.reason }}</dd>
+      </dl>
+
+      <details class="result__text">
+        <summary>View extracted text</summary>
+        <pre>{{ res.extractedText || 'No text extracted.' }}</pre>
+      </details>
+
+      <button class="btn btn--secondary" (click)="reset()">Classify another document</button>
+    </div>
+  }
+</div>
